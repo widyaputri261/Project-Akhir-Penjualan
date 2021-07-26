@@ -750,8 +750,21 @@ public class FormTransaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_btsimpanActionPerformed
 
     private void bthapusitemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bthapusitemActionPerformed
-        tableModel.removeRow(row);
-        total_harga();
+
+        int row = tbljual.getSelectedRow();
+            if(row>=0){
+            int ok=JOptionPane.showConfirmDialog(null, "Yakin Mau Hapus?","Konfirmasi",JOptionPane.YES_NO_OPTION);
+                if(ok==0){
+                    tableModel.removeRow(row);
+                    total_harga();
+                    txtkode.requestFocus();
+                }                                      
+            }else{
+                JOptionPane.showMessageDialog(this, 
+                    "Tidak ada data yang dipilih",
+                    "Peringatan",
+                    JOptionPane.WARNING_MESSAGE);
+            }
     }//GEN-LAST:event_bthapusitemActionPerformed
 
     private void txttotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttotActionPerformed
@@ -998,7 +1011,7 @@ public class FormTransaksi extends javax.swing.JFrame {
         txttotal.setText(Double.toString(total));
     }
 
-private void cekstock(){
+    private void cekstock(){
         try{
             setkoneksi();
             rs=st.executeQuery("SELECT *from barang where KodeBarang='" + txtkode.getText() + "'");
@@ -1016,9 +1029,8 @@ private void cekstock(){
         double tothrg = 0;
         int jumrec = tbljual.getRowCount();
         for (int i=0;i<jumrec;i++){
-            tothrg = tothrg + Double.parseDouble(txttot.getText().toString()); 
-        }
-        txttotal.setText(String.valueOf(tothrg)); 
+            tothrg = tothrg + Double.parseDouble(tableModel.getValueAt(i,4).toString()); }
+        txttotal.setText(String.valueOf(tothrg));    
     }
 
     private void simpan_ditabel() {
